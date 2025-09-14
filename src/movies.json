@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "titulo": "Sherlock Holmes e a Garra Escarlate",
+    "ano": 1944,
+    "diretor": "Roy William Neill"
+  },
+  {
+    "id": 2,
+    "titulo": "O Resgate do Soldado Ryan",
+    "ano": 1998,
+    "diretor": "Steven Spielberg"
+  },
+  {
+    "id": 3,
+    "titulo": "Colheita Amarga",
+    "ano": 2017,
+    "diretor": "George Mendeluk"
+  }
+]
