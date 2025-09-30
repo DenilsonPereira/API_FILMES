@@ -1,0 +1,24 @@
+name: Workflow pull request
+run-name: workflow de pull request sendo executado
+on: 
+  pull_request:
+    branches:
+      - master
+jobs:
+  executa-testes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Realiza o clone do repositório e muda para a branch correta
+        uses: actions/checkout@v5
+
+      - name: Instalar o node na versão 22
+        uses: actions/setup-node@v4
+        with: 
+          node-version: 22
+          cache: 'npm'
+      
+      - name: Instalar as dependências de execução
+        run: npm install
+      
+      - name: Executar testes
+        run: npm test
