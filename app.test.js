@@ -49,4 +49,40 @@ describe("API de Filmes", () => {
     const response = await request(app).delete("/app/filmes/123459");
     expect(response.statusCode).toBe(404);
   });
+
+  it("POST /app/filmes → deve retornar 500 se ocorrer erro ao salvar o arquivo", async () => {
+    const originalWriteFile = fs.writeFile;
+    fs.writeFile = jest.fn((_, __, cb) => cb(new Error("Falha ao escrever arquivo")));
+
+    const response = await request(app)
+      .post("/app/filmes")
+      .send({ titulo: "Teste erro", ano: 2024, diretor: "Erro Simulado" });
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty("message");
+
+    fs.writeFile = originalWriteFile;
+  });
+
+  it("DELETE /app/filmes/:id → deve retornar 500 se ocorrer erro ao salvar após exclusão", async () => {
+    const originalWriteFile = fs.writeFile;
+    fs.writeFile = jest.fn((_, __, cb) => cb(new Error("Falha ao excluir")));
+
+    const response = await request(app).delete("/app/filmes/1");
+    expect(response.statusCode).toBe(500);
+
+    fs.writeFile = originalWriteFile;
+  });
+
+  it('DELETE /app/filmes/:id → deve retornar 500 se ocorrer erro ao ler o arquivo', async () => {
+  jest.spyOn(fs, 'readFile').mockImplementation((path, encoding, callback) => {
+    callback(new Error('Falha ao ler arquivo'), null);
+  });
+
+  const res = await request(app).delete('/app/filmes/1');
+  expect(res.status).toBe(500);
+  expect(res.body).toHaveProperty('message', 'Erro interno ao ler o arquivo.');
+
+  fs.readFile.mockRestore();
+});
 });

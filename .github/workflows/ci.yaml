@@ -1,0 +1,61 @@
+name: CI - API Filmes
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    name: Verificação de estilo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar ESLint
+        run: |
+          npx eslint . --ext .js
+        continue-on-error: false
+
+  tests:
+    name: Verificação de testes e cobertura
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes com cobertura
+        run: |
+          npx jest --coverage --runInBand
+
+      - name: Garantir cobertura mínima de 90%
+        run: |
+          COVERAGE=$(npx jest --coverage --runInBand --json --outputFile=coverage.json && cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          echo "Cobertura: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+            echo "Cobertura abaixo de 90%"
+            exit 1
+          else
+            echo "Cobertura suficiente"
+          fi
