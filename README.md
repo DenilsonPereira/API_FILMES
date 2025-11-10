@@ -90,6 +90,36 @@ Obter todos os filmes
     }
     ```
 
+### Remover um filme existente
+- Método: `DELETE`
+- URL: `/app/filmes/:id`
+- Exemplo: `http://localhost:3000/app/filmes/2`
+
+- Resposta de sucesso:
+- Código: `204 No Content`
+- Conteúdo: 
+    ```
+    Sem corpo de resposta, o filme foi removido com sucesso
+    ```
+
+- Resposta de erro: 
+- Código: `404 Not Found`
+- Conteúdo: 
+    ```
+    {
+      "message": "Filme não encontrado."
+    }
+    ```
+
+- Resposta de erro interno: 
+- Código: `500 Internal Server Error`
+- Conteúdo: 
+    ```
+    {
+      "message": "Erro ao salvar ou ler o arquivo de filmes."
+    }
+    ```
+
 ## Como Executar a API
 
 Para iniciar o servidor, execute o seguinte comando no terminal:
@@ -101,6 +131,18 @@ Acesse a url:
     ```
     http://localhost:3000/app/filmes
     ```
+
+## Testes e Cobertura
+
+Para executar os testes automatizados:
+```
+  npm test
+```
+
+Gerar relatório de cobertura: 
+```
+  npm run test:coverage
+```
 
 ## Workflow utilizado
 
