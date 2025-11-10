@@ -3,7 +3,7 @@ const path = require("path");
 const request = require("supertest");
 const app = require("./src/app");
 
-const moviesPath = path.join(__dirname, "movies.json");
+const moviesPath = path.join(__dirname, "../movies.json");
 
 describe("API de Filmes", () => {
   it("GET /app/filmes → deve retornar status 200", async () => {
