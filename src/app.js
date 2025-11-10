@@ -44,4 +44,33 @@ app.post('/app/filmes', (req, res) =>{
   });
 });
 
+app.delete('/app/filmes/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+
+    fs.readFile(moviesPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Erro ao ler o arquivo:', err);
+            return res.status(500).json({ message: 'Erro interno ao ler o arquivo.' });
+        }
+
+        let filmes = JSON.parse(data);
+        const filmeIndex = filmes.findIndex(f => f.id === id);
+
+        if (filmeIndex === -1) {
+            return res.status(404).json({ message: 'Filme não encontrado.' });
+        }
+
+        filmes.splice(filmeIndex, 1);
+
+        fs.writeFile(moviesPath, JSON.stringify(filmes, null, 2), (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo:', err);
+                return res.status(500).json({ message: 'Erro ao remover o filme.' });
+            }
+
+            return res.status(204).send();
+        });
+    });
+});
+
 module.exports = app;
