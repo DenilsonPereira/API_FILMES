@@ -1,5 +1,7 @@
 # API REST de Filmes
 
+[![Docker Image Size](https://badgen.net/docker/size/denilsonpereira/api_filmes?icon=docker&label=image%20size)](https://hub.docker.com/r/denilsonpereira/api_filmes)
+
 Uma API simples criada com Node.js e Express para gerenciar uma coleção de filmes.
 
 ## Descrição
