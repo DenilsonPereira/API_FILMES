@@ -1,0 +1,34 @@
+---
+- name: Instalação da API Filmes
+  hosts: servidores
+  
+  vars:
+    repo_url: "https://github.com/DenilsonPereira/API_FILMES.git"
+    dest_folder: "/var/www/api-filmes"
+
+  tasks:
+    - name: Instalar Git, Node.js e NPM
+      package:
+        name:
+          - git
+          - nodejs
+          - npm
+        state: present
+
+    - name: Criar pasta para o site
+      file:
+        path: "{{ dest_folder }}"
+        state: directory
+        mode: '0755'
+
+    - name: Baixar projeto do GitHub
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ dest_folder }}"
+        version: "master"
+        force: yes
+
+    - name: Instalar bibliotecas do projeto
+      npm:
+        path: "{{ dest_folder }}"
+        production: no
