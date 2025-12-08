@@ -28,7 +28,19 @@
         version: "master"
         force: yes
 
-    - name: Instalar bibliotecas do projeto
+    - name: Instalar bibliotecas 
+      command: npm install
+      args:
+        chdir: "{{ dest_folder }}"
+
+    - name: Instalar PM2
       npm:
-        path: "{{ dest_folder }}"
-        production: no
+        name: pm2
+        global: yes
+        state: present
+
+    - name: Iniciar a API
+      command: pm2 start src/server.js --name "api-filmes" --force
+      args:
+        chdir: "{{ dest_folder }}"
+      ignore_errors: yes
